@@ -93,6 +93,11 @@ export class Slider {
   @Prop() error?: boolean | string;
 
   /**
+   * Disable tooltip display
+   */
+  @Prop() tooltipDisabled = false;
+
+  /**
    *
    */
   @Event() valueChange!: EventEmitter<number>;
@@ -124,6 +129,10 @@ export class Slider {
 
   @Watch('showTooltip')
   onShowTooltipChange() {
+    if (this.tooltipDisabled) {
+      return;
+    }
+
     if (this.showTooltip && this.pseudoThumb) {
       this.tooltip?.showTooltip(this.pseudoThumb);
       return;
@@ -214,7 +223,11 @@ export class Slider {
           disabled: this.disabled,
           error: !!this.error,
         }}
-        onPointerDown={() => setTimeout(() => (this.showTooltip = true))}
+        onPointerDown={() => {
+          if (!this.tooltipDisabled) {
+            setTimeout(() => (this.showTooltip = true));
+          }
+        }}
       >
         <div class="slider">
           <div class="track">
@@ -276,7 +289,9 @@ export class Slider {
                   this.traceReference >= this.max),
             }}
             onFocus={() => {
-              this.showTooltip = true;
+              if (!this.tooltipDisabled) {
+                this.showTooltip = true;
+              }
             }}
             onBlur={() => {
               this.showTooltip = false;
@@ -288,16 +303,18 @@ export class Slider {
             {...this.a11yAttributes}
           />
 
-          <ix-tooltip
-            ref={this.tooltipRef}
-            class={{
-              'hide-tooltip': !this.showTooltip,
-            }}
-            animationFrame={true}
-            for={this.thumbRef.waitForCurrent()}
-          >
-            {this.rangeInput}
-          </ix-tooltip>
+          {!this.tooltipDisabled && (
+            <ix-tooltip
+              ref={this.tooltipRef}
+              class={{
+                'hide-tooltip': !this.showTooltip,
+              }}
+              animationFrame={true}
+              for={this.thumbRef.waitForCurrent()}
+            >
+              {this.rangeInput}
+            </ix-tooltip>
+          )}
         </div>
         <div class="label">
           <div class="label-start">

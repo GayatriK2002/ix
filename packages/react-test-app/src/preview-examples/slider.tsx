@@ -17,7 +17,7 @@ export default () => {
         <span slot="label-end">100</span>
       </IxSlider>
 
-      <IxSlider min={0} max={50} step={10} value={10}>
+      <IxSlider min={0} max={50} step={10} value={10} tooltipDisabled>
         <span slot="label-start">0</span>
         <span slot="label-end">50</span>
       </IxSlider>

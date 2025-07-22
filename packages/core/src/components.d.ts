@@ -2933,6 +2933,11 @@ export namespace Components {
          */
         "step": number;
         /**
+          * Disable tooltip display
+          * @default false
+         */
+        "tooltipDisabled": boolean;
+        /**
           * Show a trace line
           * @default false
          */
@@ -8690,6 +8695,11 @@ declare namespace LocalJSX {
           * @default 1
          */
         "step"?: number;
+        /**
+          * Disable tooltip display
+          * @default false
+         */
+        "tooltipDisabled"?: boolean;
         /**
           * Show a trace line
           * @default false

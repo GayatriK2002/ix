@@ -90,3 +90,38 @@ regressionTest(
     await expect(slider).toHaveAttribute('value', '20');
   }
 );
+
+regressionTest(
+  'should not show tooltip when tooltip-disabled is true',
+  async ({ page, mount }) => {
+    await mount(`<ix-slider value="20" tooltip-disabled></ix-slider>`);
+
+    const slider = page.locator('ix-slider');
+    await expect(slider).toHaveClass(/hydrated/);
+
+    const tooltip = slider.locator('ix-tooltip');
+    const input = slider.locator('input');
+
+    await input.focus();
+    await expect(tooltip).not.toBeVisible();
+
+    const box = await slider.boundingBox();
+    if (box) {
+      await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
+      await page.mouse.down();
+      await page.mouse.move(box.x + box.width / 3, box.y + box.height / 3);
+      await expect(tooltip).not.toBeVisible();
+      await page.mouse.up();
+    } else {
+      throw new Error('Slider bounding box is null.');
+    }
+
+    await input.press('ArrowRight');
+    await input.press('ArrowRight');
+    await page.waitForTimeout(500);
+    await expect(tooltip).not.toBeVisible();
+
+    const tooltipCount = await tooltip.count();
+    expect(tooltipCount).toBe(0);
+  }
+);

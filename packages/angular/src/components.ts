@@ -2305,14 +2305,14 @@ export declare interface IxSelectItem extends Components.IxSelectItem {
 
 
 @ProxyCmp({
-  inputs: ['disabled', 'error', 'marker', 'max', 'min', 'step', 'trace', 'traceReference', 'value']
+  inputs: ['disabled', 'error', 'marker', 'max', 'min', 'step', 'tooltipDisabled', 'trace', 'traceReference', 'value']
 })
 @Component({
   selector: 'ix-slider',
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: '<ng-content></ng-content>',
   // eslint-disable-next-line @angular-eslint/no-inputs-metadata-property
-  inputs: ['disabled', 'error', 'marker', 'max', 'min', 'step', 'trace', 'traceReference', 'value'],
+  inputs: ['disabled', 'error', 'marker', 'max', 'min', 'step', 'tooltipDisabled', 'trace', 'traceReference', 'value'],
 })
 export class IxSlider {
   protected el: HTMLIxSliderElement;

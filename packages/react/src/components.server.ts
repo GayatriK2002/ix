@@ -2039,7 +2039,8 @@ export const IxSlider: StencilReactComponent<IxSliderElement, IxSliderEvents> = 
         trace: 'trace',
         traceReference: 'trace-reference',
         disabled: 'disabled',
-        error: 'error'
+        error: 'error',
+        tooltipDisabled: 'tooltip-disabled'
     },
     hydrateModule: import('@siemens/ix/hydrate') as Promise<HydrateModule>,
     serializeShadowRoot,
