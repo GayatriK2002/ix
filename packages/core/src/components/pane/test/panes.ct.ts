@@ -238,3 +238,48 @@ regressionTest(
     expect(isExpanded).toBe(false);
   }
 );
+
+regressionTest(
+  'ESC closes only the topmost floating pane (LIFO stack behavior)',
+  async ({ mount, page }) => {
+    await mount(`
+      <ix-pane
+        id="pane-a"
+        heading="Pane A"
+        composition="right"
+        variant="floating"
+        hide-on-collapse
+        expanded="true"
+      ></ix-pane>
+      <ix-pane
+        id="pane-b"
+        heading="Pane B"
+        composition="right"
+        variant="floating"
+        hide-on-collapse
+        expanded="true"
+      ></ix-pane>
+    `);
+
+    const paneA = page.locator('#pane-a');
+    const paneB = page.locator('#pane-b');
+
+    await expect(paneA).toHaveClass(/hydrated/);
+    await expect(paneB).toHaveClass(/hydrated/);
+
+    await page.keyboard.press('Escape');
+
+    await expect
+      .poll(() => paneB.evaluate((el: HTMLIxPaneElement) => el.expanded))
+      .toBe(false);
+    await expect
+      .poll(() => paneA.evaluate((el: HTMLIxPaneElement) => el.expanded))
+      .toBe(true);
+
+    await page.keyboard.press('Escape');
+
+    await expect
+      .poll(() => paneA.evaluate((el: HTMLIxPaneElement) => el.expanded))
+      .toBe(false);
+  }
+);

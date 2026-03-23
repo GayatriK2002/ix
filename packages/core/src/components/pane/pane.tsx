@@ -44,6 +44,71 @@ import type {
 } from './pane.types';
 import { a11yBoolean } from '../utils/a11y';
 
+class PaneStack {
+  private readonly stack: HTMLIxPaneElement[] = [];
+  private readonly baseZIndex = 1000;
+
+  constructor() {
+    if (typeof window === 'undefined') return;
+    window.addEventListener(
+      'keydown',
+      (event: KeyboardEvent) => {
+        const topPane = this.stack.at(-1);
+        if (!topPane || event.key !== 'Escape') return;
+        setTimeout(() => {
+          if (event.defaultPrevented) return;
+
+          const expandedChangedEvent = new CustomEvent<ExpandedChangedEvent>(
+            'expandedChanged',
+            {
+              detail: {
+                slot: topPane.getAttribute('slot') ?? '',
+                expanded: false,
+              },
+              bubbles: true,
+              cancelable: true,
+            }
+          );
+
+          if (topPane.dispatchEvent(expandedChangedEvent)) {
+            topPane.expanded = false;
+          }
+        }, 0);
+      },
+      { capture: true }
+    );
+  }
+
+  register(pane: HTMLIxPaneElement) {
+    this.remove(pane);
+    this.stack.push(pane);
+    this.syncZIndices();
+  }
+
+  unregister(pane: HTMLIxPaneElement) {
+    this.remove(pane);
+    pane.style.removeProperty('z-index');
+    this.syncZIndices();
+  }
+
+  moveToTop(pane: HTMLIxPaneElement) {
+    if (this.stack.includes(pane)) this.register(pane);
+  }
+
+  private remove(pane: HTMLIxPaneElement) {
+    const index = this.stack.indexOf(pane);
+    if (index !== -1) this.stack.splice(index, 1);
+  }
+
+  private syncZIndices() {
+    this.stack.forEach((pane, index) => {
+      pane.style.zIndex = `${this.baseZIndex + index}`;
+    });
+  }
+}
+
+const paneStack = new PaneStack();
+
 /**
  * @slot header - Additional slot for the header content
  */
@@ -172,6 +237,7 @@ export class Pane {
   private mutationObserver?: MutationObserver;
   private resizeObserver?: ResizeObserver;
   private disposableWindowClick?: DisposableEventListener;
+  private disposableHostClick?: DisposableEventListener;
 
   get currentSlot() {
     return this.hostElement.getAttribute('slot');
@@ -193,25 +259,45 @@ export class Pane {
     this.mutationObserver?.disconnect();
     this.resizeObserver?.disconnect();
     this.disposableWindowClick?.();
+    this.disposableHostClick?.();
+
+    if (this.variant === 'floating') {
+      paneStack.unregister(this.hostElement);
+    }
   }
 
   @Watch('expanded')
   onExpandedChange() {
     if (!this.closeOnClickOutside || !this.expanded) {
       this.disposableWindowClick?.();
-      return;
+    } else {
+      this.disposableWindowClick = addDisposableEventListener(
+        window,
+        'click',
+        (event) => {
+          const path = event.composedPath?.() || [];
+          if (!path.includes(this.hostElement)) {
+            this.dispatchExpandedChangedEvent();
+          }
+        }
+      );
     }
 
-    this.disposableWindowClick = addDisposableEventListener(
-      window,
-      'click',
-      (event) => {
-        const path = event.composedPath?.() || [];
-        if (!path.includes(this.hostElement)) {
-          this.dispatchExpandedChangedEvent();
-        }
+    if (this.variant === 'floating') {
+      if (this.expanded) {
+        paneStack.register(this.hostElement);
+
+        this.disposableHostClick?.();
+        this.disposableHostClick = addDisposableEventListener(
+          this.hostElement,
+          'click',
+          () => paneStack.moveToTop(this.hostElement)
+        );
+      } else {
+        paneStack.unregister(this.hostElement);
+        this.disposableHostClick?.();
       }
-    );
+    }
   }
 
   componentWillLoad() {
@@ -505,6 +591,13 @@ export class Pane {
   @Watch('variant')
   onVariantChange(value: 'inline' | 'floating') {
     this.floating = value === 'floating';
+
+    if (value === 'floating' && this.expanded) {
+      paneStack.register(this.hostElement);
+    } else if (value !== 'floating') {
+      paneStack.unregister(this.hostElement);
+      this.disposableHostClick?.();
+    }
 
     this.variantChanged.emit({
       slot: this.currentSlot ?? '',
