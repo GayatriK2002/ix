@@ -47,36 +47,42 @@ import { a11yBoolean } from '../utils/a11y';
 class PaneStack {
   private readonly stack: HTMLIxPaneElement[] = [];
   private readonly baseZIndex = 1000;
+  private readonly keydownHandler: (event: KeyboardEvent) => void;
 
   constructor() {
-    if (typeof window === 'undefined') return;
-    window.addEventListener(
-      'keydown',
-      (event: KeyboardEvent) => {
-        const topPane = this.stack.at(-1);
-        if (!topPane || event.key !== 'Escape') return;
-        setTimeout(() => {
-          if (event.defaultPrevented) return;
+    this.keydownHandler = (event: KeyboardEvent) => {
+      if (event.key !== 'Escape') return;
+      const topPane = this.stack.filter((p) => p.isConnected).at(-1);
+      if (!topPane) return;
+      setTimeout(() => {
+        if (event.defaultPrevented) return;
 
-          const expandedChangedEvent = new CustomEvent<ExpandedChangedEvent>(
-            'expandedChanged',
-            {
-              detail: {
-                slot: topPane.getAttribute('slot') ?? '',
-                expanded: false,
-              },
-              bubbles: true,
-              cancelable: true,
-            }
-          );
-
-          if (topPane.dispatchEvent(expandedChangedEvent)) {
-            topPane.expanded = false;
+        const expandedChangedEvent = new CustomEvent<ExpandedChangedEvent>(
+          'expandedChanged',
+          {
+            detail: {
+              slot: topPane.getAttribute('slot') ?? '',
+              expanded: false,
+            },
+            bubbles: true,
+            cancelable: true,
           }
-        }, 0);
-      },
-      { capture: true }
-    );
+        );
+
+        if (topPane.dispatchEvent(expandedChangedEvent)) {
+          topPane.expanded = false;
+        }
+      }, 0);
+    };
+
+    if (typeof window === 'undefined') return;
+    window.addEventListener('keydown', this.keydownHandler, { capture: true });
+  }
+
+  destroy() {
+    window.removeEventListener('keydown', this.keydownHandler, {
+      capture: true,
+    });
   }
 
   register(pane: HTMLIxPaneElement) {
