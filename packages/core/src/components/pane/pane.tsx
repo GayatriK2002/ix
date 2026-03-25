@@ -93,7 +93,6 @@ class PaneStack {
 
   register(pane: HTMLIxPaneElement) {
     this.remove(pane);
-    // Insert in DOM order so that later siblings are higher in the stack
     const insertIndex = this.stack.findIndex(
       (p) => pane.compareDocumentPosition(p) & Node.DOCUMENT_POSITION_FOLLOWING
     );
@@ -107,7 +106,9 @@ class PaneStack {
 
   unregister(pane: HTMLIxPaneElement) {
     this.remove(pane);
-    pane.style.removeProperty('z-index');
+    if (!pane.closest('ix-pane-layout')) {
+      pane.style.removeProperty('z-index');
+    }
     this.syncZIndices();
   }
 
@@ -125,7 +126,9 @@ class PaneStack {
 
   private syncZIndices() {
     this.stack.forEach((pane, index) => {
-      pane.style.zIndex = `${this.baseZIndex + index}`;
+      if (!pane.closest('ix-pane-layout')) {
+        pane.style.zIndex = `${this.baseZIndex + index}`;
+      }
     });
   }
 }
