@@ -52,7 +52,13 @@ class PaneStack {
   constructor() {
     this.keydownHandler = (event: KeyboardEvent) => {
       if (event.key !== 'Escape') return;
-      const topPane = this.stack.filter((p) => p.isConnected).at(-1);
+      let topPane: HTMLIxPaneElement | undefined;
+      for (let i = this.stack.length - 1; i >= 0; i--) {
+        if (this.stack[i].isConnected) {
+          topPane = this.stack[i];
+          break;
+        }
+      }
       if (!topPane) return;
       setTimeout(() => {
         if (event.defaultPrevented) return;
@@ -87,7 +93,15 @@ class PaneStack {
 
   register(pane: HTMLIxPaneElement) {
     this.remove(pane);
-    this.stack.push(pane);
+    // Insert in DOM order so that later siblings are higher in the stack
+    const insertIndex = this.stack.findIndex(
+      (p) => pane.compareDocumentPosition(p) & Node.DOCUMENT_POSITION_FOLLOWING
+    );
+    if (insertIndex === -1) {
+      this.stack.push(pane);
+    } else {
+      this.stack.splice(insertIndex, 0, pane);
+    }
     this.syncZIndices();
   }
 
@@ -98,7 +112,10 @@ class PaneStack {
   }
 
   moveToTop(pane: HTMLIxPaneElement) {
-    if (this.stack.includes(pane)) this.register(pane);
+    if (!this.stack.includes(pane)) return;
+    this.remove(pane);
+    this.stack.push(pane);
+    this.syncZIndices();
   }
 
   private remove(pane: HTMLIxPaneElement) {
