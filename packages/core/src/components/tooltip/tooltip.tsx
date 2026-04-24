@@ -427,6 +427,8 @@ export class Tooltip {
   }
 
   private registerDomChangeListener() {
+    this.disposeDomChangeListener?.();
+
     const observer = new MutationObserver(() => {
       this.registerTriggerListener();
     });
@@ -463,6 +465,11 @@ export class Tooltip {
   }
 
   componentDidLoad() {
+    this.registerDomChangeListener();
+  }
+
+  connectedCallback() {
+    this.registerTriggerListener();
     this.registerDomChangeListener();
   }
 
