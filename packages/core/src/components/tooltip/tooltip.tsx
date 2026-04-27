@@ -99,6 +99,8 @@ export class Tooltip {
   private disposeTooltipListener?: () => void;
   private disposeDomChangeListener?: () => void;
 
+  private hasDisconnected = false;
+
   private readonly instance = tooltipInstance++;
 
   private readonly dialogRef = makeRef<HTMLDialogElement>();
@@ -469,11 +471,14 @@ export class Tooltip {
   }
 
   connectedCallback() {
-    this.registerTriggerListener();
-    this.registerDomChangeListener();
+    if (this.hasDisconnected) {
+      this.registerTriggerListener();
+      this.registerDomChangeListener();
+    }
   }
 
   disconnectedCallback() {
+    this.hasDisconnected = true;
     this.clearTimeouts();
 
     this.disposeAutoUpdate?.();
