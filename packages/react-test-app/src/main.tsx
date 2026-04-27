@@ -237,6 +237,7 @@ import TimeRange from './preview-examples/time-range';
 import Timepicker from './preview-examples/timepicker';
 import timepickerFormatAdjusted from './preview-examples/timepicker-format-adjusted.tsx';
 import timepickerIntervals from './preview-examples/timepicker-intervals.tsx';
+import timepickerMinMaxTime from './preview-examples/timepicker-min-max-time.tsx';
 import Toast from './preview-examples/toast';
 import ToastCustom from './preview-examples/toast-custom';
 import ToastPosition from './preview-examples/toast-position';
@@ -522,6 +523,7 @@ const routes: IxPreviewRoutes = {
   '/preview/time-input-with-slots': timeInputWithSlots,
   '/preview/timepicker-format-adjusted': timepickerFormatAdjusted,
   '/preview/timepicker-intervals': timepickerIntervals,
+  '/preview/timepicker-min-max-time': timepickerMinMaxTime,
   '/preview/toggle-button-primary': toggleButtonPrimary,
 };
 

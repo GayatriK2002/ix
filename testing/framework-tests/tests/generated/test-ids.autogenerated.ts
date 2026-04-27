@@ -24,6 +24,7 @@ export const testIds = [
   "toast-position",
   "toast-custom",
   "timepicker",
+  "timepicker-min-max-time",
   "timepicker-intervals",
   "timepicker-format-adjusted",
   "time-range",

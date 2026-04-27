@@ -204,6 +204,7 @@ import './time-range-axe.spec.ts';
 import './timepicker-axe.spec.ts';
 import './timepicker-format-adjusted-axe.spec.ts';
 import './timepicker-intervals-axe.spec.ts';
+import './timepicker-min-max-time-axe.spec.ts';
 import './toast-axe.spec.ts';
 import './toast-custom-axe.spec.ts';
 import './toast-position-axe.spec.ts';

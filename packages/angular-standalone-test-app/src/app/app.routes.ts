@@ -498,6 +498,10 @@ export const routePaths: IxPreviewRoutes = {
     import('../preview-examples/time-range').then((m) => m.default),
   'preview/timepicker': () =>
     import('../preview-examples/timepicker').then((m) => m.default),
+  'preview/timepicker-min-max-time': () =>
+    import('../preview-examples/timepicker-min-max-time').then(
+      (m) => m.default
+    ),
   'preview/toast': () =>
     import('../preview-examples/toast').then((m) => m.default),
   'preview/toast-custom': () =>

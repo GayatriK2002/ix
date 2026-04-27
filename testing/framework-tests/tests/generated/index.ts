@@ -409,6 +409,8 @@ import './timepicker-format-adjusted-axe.spec.ts';
 import './timepicker-format-adjusted.spec.ts';
 import './timepicker-intervals-axe.spec.ts';
 import './timepicker-intervals.spec.ts';
+import './timepicker-min-max-time-axe.spec.ts';
+import './timepicker-min-max-time.spec.ts';
 import './timepicker.spec.ts';
 import './toast-axe.spec.ts';
 import './toast-custom-axe.spec.ts';
