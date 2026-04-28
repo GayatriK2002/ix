@@ -58,7 +58,7 @@ import ContentHeaderWithSlot from './preview-examples/content-header-with-slot.v
 import Content from './preview-examples/content.vue';
 import CustomFieldValidation from './preview-examples/custom-field-validation.vue';
 import CustomField from './preview-examples/custom-field.vue';
-import DateDropdownUserRange from './preview-examples/date-dropdown-user-range.vue';
+import DateDropdownPresets from './preview-examples/date-dropdown-presets.vue';
 import DateDropdown from './preview-examples/date-dropdown.vue';
 import DateRange from './preview-examples/date-range.vue';
 import DatetimeRange from './preview-examples/datetime-range.vue';
@@ -300,7 +300,7 @@ const routes: IxPreviewRoutes = {
   '/preview/custom-field': CustomField,
   '/preview/custom-field-validation': CustomFieldValidation,
   '/preview/date-dropdown': DateDropdown,
-  '/preview/date-dropdown-user-range': DateDropdownUserRange,
+  '/preview/date-dropdown-presets': DateDropdownPresets,
   '/preview/date-range': DateRange,
   '/preview/datetime-range': DatetimeRange,
   '/preview/content-header-no-back': ContentHeaderNoBack,

@@ -61,7 +61,7 @@ import ContentHeaderWithSlot from './preview-examples/content-header-with-slot';
 import CustomField from './preview-examples/custom-field';
 import CustomFieldValidation from './preview-examples/custom-field-validation';
 import DateDropdown from './preview-examples/date-dropdown';
-import DateDropdownUserRange from './preview-examples/date-dropdown-user-range';
+import DateDropdownPresets from './preview-examples/date-dropdown-presets';
 import DateRange from './preview-examples/date-range';
 import DatetimeRange from './preview-examples/datetime-range';
 import DateInput from './preview-examples/date-input';
@@ -317,7 +317,7 @@ const routes: IxPreviewRoutes = {
   '/preview/chip': Chip,
   '/preview/content': Content,
   '/preview/date-dropdown': DateDropdown,
-  '/preview/date-dropdown-user-range': DateDropdownUserRange,
+  '/preview/date-dropdown-presets': DateDropdownPresets,
   '/preview/date-range': DateRange,
   '/preview/datetime-range': DatetimeRange,
   '/preview/content-header-no-back': ContentHeaderNoBack,

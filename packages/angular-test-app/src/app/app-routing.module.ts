@@ -56,7 +56,7 @@ import ContentHeaderWithSlot from '../preview-examples/content-header-with-slot'
 import CustomField from '../preview-examples/custom-field';
 import CustomFieldValidation from '../preview-examples/custom-field-validation';
 import DateDropdown from '../preview-examples/date-dropdown';
-import DateDropdownUserRange from '../preview-examples/date-dropdown-user-range';
+import DateDropdownPresets from '../preview-examples/date-dropdown-presets';
 import DateRange from '../preview-examples/date-range';
 import DatetimeRange from '../preview-examples/datetime-range';
 import DateInput from '../preview-examples/date-input';
@@ -450,8 +450,8 @@ const routes: Routes = [
         component: DateDropdown,
       },
       {
-        path: 'date-dropdown-user-range',
-        component: DateDropdownUserRange,
+        path: 'date-dropdown-presets',
+        component: DateDropdownPresets,
       },
       {
         path: 'date-range',

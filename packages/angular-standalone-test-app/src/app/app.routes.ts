@@ -119,8 +119,8 @@ export const routePaths: IxPreviewRoutes = {
     ),
   'preview/date-dropdown': () =>
     import('../preview-examples/date-dropdown').then((m) => m.default),
-  'preview/date-dropdown-user-range': () =>
-    import('../preview-examples/date-dropdown-user-range').then(
+  'preview/date-dropdown-presets': () =>
+    import('../preview-examples/date-dropdown-presets').then(
       (m) => m.default
     ),
   'preview/date-range': () =>

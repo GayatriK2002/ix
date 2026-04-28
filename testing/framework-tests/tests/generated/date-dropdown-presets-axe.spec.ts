@@ -13,14 +13,15 @@
  */
 import { test, expect } from '@playwright/test';
 import { waitForReadiness } from '../utils';
+import AxeBuilder from '@axe-core/playwright';
 
-test('date-dropdown-user-range', async ({ page }) => {
-  await page.goto('/preview/date-dropdown-user-range');
+test('date-dropdown-presets - accessibility check', async ({ page }) => {
+  await page.goto('/preview/date-dropdown-presets');
 
   // Ugly and not the reliable way to wait for Stencil to be ready
   await waitForReadiness(page);
 
-  await expect(page.locator('body')).toMatchAriaSnapshot({
-    name: 'date-dropdown-user-range.aria-snapshot.yaml',
-  });
+  const accessibilityScanResults = await new AxeBuilder({ page } as any).disableRules(['page-has-heading-one']).analyze();
+
+  expect(accessibilityScanResults.violations).toEqual([]);
 });
