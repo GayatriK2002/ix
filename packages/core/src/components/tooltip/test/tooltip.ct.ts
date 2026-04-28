@@ -110,7 +110,7 @@ regressionTest(
     await page.evaluate(() => {
       const container = document.getElementById('container')!;
       const tooltip = container.querySelector('ix-tooltip')!;
-      container.removeChild(tooltip);
+      tooltip.remove();
       container.appendChild(tooltip);
     });
 
